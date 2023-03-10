@@ -1,0 +1,1724 @@
+name: sudoku
+init: start
+accept: Y
+
+///////////////////////LINII////////////////////////////////
+// la fiecare start suprascriu cifrele cu A-1,B-2,C-3,D-4
+// astfel tin cont de ce cifra a fost verificata pe linia curenta
+// in cazul in care nu se gaseste un duplicat al ei 
+start,*
+start,*,>
+
+start,:
+start,:,>
+
+start,1
+find1,A,>
+
+start,2
+find2,B,>
+
+start,3
+find3,C,>
+
+start,4
+find4,D,>
+
+//in cazul in care in start primesc o casuta goala
+// atunci este clar ca s-au verificat toate liniile si ele sunt ok
+//daca liniile sunt ok trec in starea de verificare pt coloane
+
+start,_
+col1,_,<
+
+
+//linia este gresita doar daca findx primeste x altfel doar traveresez pana 
+// la finalul liniei curente * dupa care resetez startul pt urmatoarea cifra 
+// din linia curenta
+//nu se va ajunge niciodata ca un find sa gaseasca o litera pentru ca ideea 
+//este sa se verifice o cifra ,sa se inlocuiasca cu litera ei si la final sa 
+//se reseteze startul dupa cea mai apropiata litera pt mai putini pasi
+
+///////////cifra1:
+find1,1
+N,1,-
+
+find1,2
+find1,2,>
+
+find1,3
+find1,3,>
+
+find1,4
+find1,4,>
+
+find1,:
+find1,:,>
+
+find1,*
+reset,*,<
+
+///////////cifra2:
+find2,1
+find2,1,>
+
+find2,2
+N,2,-
+
+find2,3
+find2,3,>
+
+find2,4
+find2,4,>
+
+find2,:
+find2,:,>
+
+find2,*
+reset,*,<
+
+///////////cifra3
+find3,1
+find3,1,>
+
+find3,2
+find3,2,>
+
+find3,3
+N,3,-
+
+find3,4
+find3,4,>
+
+find3,:
+find3,:,>
+
+find3,*
+reset,*,<
+
+////////////cifra4:
+find4,1
+find4,1,>
+
+find4,2
+find4,2,>
+
+find4,3
+find4,3,>
+
+find4,4
+N,4,-
+
+find4,:
+find4,:,>
+
+find4,*
+reset,*,<
+
+
+////////reset: reseteaza startul cand da de prima litera
+
+reset,1
+reset,1,<
+
+reset,2
+reset,2,<
+
+reset,3
+reset,3,<
+
+reset,4
+reset,4,<
+
+reset,:
+reset,:,<
+
+reset,A 
+start,A,>
+
+reset,B 
+start,B,>
+
+reset,C 
+start,C,>
+
+reset,D 
+start,D,>
+
+///aici se intelege faptul ca linia curenta este corecta si se trece la urmatoarea linie 
+reset,* 
+start,*,>
+
+
+///////////////////////COLOANE////////////////////////////////
+//din A B C D pe cele checkuite le voi face inapoi 1 2 3 4
+//am 4 "starturi" care marcheaza pe ce coloana ma aflu
+//verific de la dreapta la stanga pe rand fiecare element cu 
+//urmatorul de pe coloana sa pana ajung la final, ma intorc la inceput si verific apoi 
+//urmatorul element de pe linia curenta cu acelasi algoritm trecand prin celelalte linii 
+//si verificand elementul care e pe aceeasi coloana cu ele
+//elementul verificat care nu s-a gasit pe coloana sa il trec cu 1/2/3/4 
+//termin cu ultima linie, trec la urmatoarea linie cu coloanele ramase si tot asa pana cand 
+//am in cazul in care totul este corect doar 1 2 3 4 si * :
+
+
+//inceput: verific pe ce coloana sunt <=> verificarea primei litere de dupa * 
+//daca am terminat cu linia din col4 trec inapoi in col1 
+
+/////////////////coloana 1
+col1,*
+col1,*,<
+
+//daca gasesc o litera inseamna ca sunt pe coloana "stare" si trb sa vf daca
+//pe restul coloanei se repeta sau nu litera
+//elementul curent verificat il marchez prin corespondentul sau cifra 
+
+col1,A 
+findA_col1,1,< 
+
+col1,B 
+findB_col1,2,< 
+
+col1,C 
+findC_col1,3,< 
+
+col1,D 
+findD_col1,4,< 
+
+//daca primesc cifra inseamna ca pe linia curenta am verificat elem de pe coloana "stare"
+//curenta si astfel trebuie sa desemnez elementul urmatoarei coloane
+
+col1,1
+col2,1,<
+
+col1,2
+col2,2,<
+
+col1,3
+col2,3,<
+
+col1,4
+col2,4,<
+
+//daca primesc blank inseamna ca toata banda are doar cifre care au fost verificate
+//deci coloanele sunt corecte si se poate trece in faza de verificare a portiunilor
+
+col1,_ 
+start*,_,>
+
+
+/////////////////coloana 2
+col2,A 
+findA_col2,1,< 
+
+col2,B 
+findB_col2,2,< 
+
+col2,C 
+findC_col2,3,< 
+
+col2,D 
+findD_col2,4,< 
+
+//schimb coloana
+col2,1
+col3,1,<
+
+col2,2
+col3,2,<
+
+col2,3
+col3,3,<
+
+col2,4
+col3,4,<
+
+/////////////////coloana 3-incepe dupa :
+col3,:
+col3,:,<
+
+col3,A 
+findA_col3,1,< 
+
+col3,B 
+findB_col3,2,< 
+
+col3,C 
+findC_col3,3,< 
+
+col3,D 
+findD_col3,4,< 
+
+//schimb coloana
+col3,1
+col4,1,<
+
+col3,2
+col4,2,<
+
+col3,3
+col4,3,<
+
+col3,4
+col4,4,<
+
+/////////////////coloana 4
+col4,A 
+findA_col4,1,< 
+
+col4,B 
+findB_col4,2,< 
+
+col4,C 
+findC_col4,3,< 
+
+col4,D 
+findD_col4,4,< 
+
+//schimbare coloana
+col4,1
+col1,1,<
+
+col4,2
+col1,2,<
+
+col4,3
+col1,3,<
+
+col4,4
+col1,4,<
+
+                                              
+/////////////////FIND_litera_coloana cu starile aux pt fiecare /////////////////
+//findurile raman in acc stare pana cand dau de * si apoi trec intr-o stare
+//auxiliara de check uit elem de pe coloana in care sunt ---
+//elem care se afla pe urmatoarea linie
+
+/////////////////FIND PT LITERA A/////////////////
+
+/////////////////find pt coloana 1
+//am doar un check auxiliar care vf prima litera dupa * (elem de pe col1)
+//daca prima litera este sau nu cea cautata pt ca inputul
+//sa nu fie acceptat
+
+findA_col1,A
+findA_col1,A,<
+
+findA_col1,B
+findA_col1,B,<
+
+findA_col1,C
+findA_col1,C,<
+
+findA_col1,D
+findA_col1,D,<
+
+findA_col1,:
+findA_col1,:,<
+
+//findurile nu vor da niciodata de 1234 intrucat liniile din fata au fost verificate
+//starea aux:
+findA_col1,*
+checkA_col1,*,<
+
+checkA_col1,A 
+N,A,-
+
+checkA_col1,B 
+findA_col1,B,<
+
+checkA_col1,C 
+findA_col1,C,<
+
+checkA_col1,D 
+findA_col1,D,<
+
+//cand am ajuns la finalul inputului - voi reseta startul dupa ce ma intorc 
+//se ajunge in blank doar din check, nu find
+checkA_col1,_ 
+reset_col,_,>
+
+
+/////////////////find pt coloana 2:
+findA_col2,A
+findA_col2,A,<
+
+findA_col2,B
+findA_col2,B,<
+
+findA_col2,C
+findA_col2,C,<
+
+findA_col2,D
+findA_col2,D,<
+
+findA_col2,:
+findA_col2,:,<
+
+findA_col2,*
+checkA_col2,*,<
+
+
+//stare aux pt vf elem de pe col2:
+//am nevoie de o stare care face inca un pas
+checkA_col2,A
+checkA_col2_pas,A,<
+
+checkA_col2,B
+checkA_col2_pas,B,<
+
+checkA_col2,C
+checkA_col2_pas,C,<
+
+checkA_col2,D
+checkA_col2_pas,D,<
+
+checkA_col2,_ 
+reset_col,_,>
+
+//dupa ce am facut pasul am elem de pe col2 urmatorul pe care il verific:
+checkA_col2_pas,A 
+N,A,-
+
+checkA_col2_pas,B
+findA_col2,B,<
+
+checkA_col2_pas,C
+findA_col2,C,<
+
+checkA_col2_pas,D
+findA_col2,D,<
+
+
+/////////////////find pt coloana 3:
+findA_col3,A
+findA_col3,A,<
+
+findA_col3,B
+findA_col3,B,<
+
+findA_col3,C
+findA_col3,C,<
+
+findA_col3,D
+findA_col3,D,<
+
+findA_col3,*
+findA_col3,*,<
+
+//la col 3 si 4 doar din find se poate ajunge la blank
+findA_col3,_ 
+reset_col,_,>
+
+
+//stare aux pt vf elem de pe coloana3 apare 
+//imediat cand se da pe banda de : pt ca urm element este cel de verificat
+findA_col3,:
+checkA_col3,:,<
+
+//stare aux:
+checkA_col3,A 
+N,A,-
+
+checkA_col3,B 
+findA_col3,B,<
+
+checkA_col3,C 
+findA_col3,C,<
+
+checkA_col3,D 
+findA_col3,D,<
+
+
+/////////////////find pt coloana 4:
+//este urmatorul elem dupa elem de dupa :
+
+findA_col4,A
+findA_col4,A,<
+
+findA_col4,B
+findA_col4,B,<
+
+findA_col4,C
+findA_col4,C,<
+
+findA_col4,D
+findA_col4,D,<
+
+findA_col4,*
+findA_col4,*,<
+
+findA_col4,:
+checkA_col4,:,<
+
+findA_col4,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col4:
+//am nevoie de o stare care face inca un pas
+checkA_col4,A
+checkA_col4_pas,A,<
+
+checkA_col4,B
+checkA_col4_pas,B,<
+
+checkA_col4,C
+checkA_col4_pas,C,<
+
+checkA_col4,D
+checkA_col4_pas,D,<
+
+//dupa ce am facut pasul am elem de pe col4 urmatorul pe care il verific:
+checkA_col4_pas,A 
+N,A,-
+
+checkA_col4_pas,B
+findA_col4,B,<
+
+checkA_col4_pas,C
+findA_col4,C,<
+
+checkA_col4_pas,D
+findA_col4,D,<
+
+
+
+/////////////////FIND PT LITERA B/////////////////
+
+/////////////////find pt coloana 1:
+findB_col1,A
+findB_col1,A,<
+
+findB_col1,B
+findB_col1,B,<
+
+findB_col1,C
+findB_col1,C,<
+
+findB_col1,D
+findB_col1,D,<
+
+findB_col1,:
+findB_col1,:,<
+
+
+//starea aux:
+findB_col1,*
+checkB_col1,*,<
+
+checkB_col1,B 
+N,B,-
+
+checkB_col1,A 
+findB_col1,A,<
+
+checkB_col1,C 
+findB_col1,C,<
+
+checkB_col1,D 
+findB_col1,D,<
+
+checkB_col1,_ 
+reset_col,_,>
+
+/////////////////find pt coloana 2:
+findB_col2,A
+findB_col2,A,<
+
+findB_col2,B
+findB_col2,B,<
+
+findB_col2,C
+findB_col2,C,<
+
+findB_col2,D
+findB_col2,D,<
+
+findB_col2,:
+findB_col2,:,<
+
+findB_col2,*
+checkB_col2,*,<
+
+
+//stare aux pt vf elem de pe col2:
+checkB_col2,A
+checkB_col2_pas,A,<
+
+checkB_col2,B
+checkB_col2_pas,B,<
+
+checkB_col2,C
+checkB_col2_pas,C,<
+
+checkB_col2,D
+checkB_col2_pas,D,<
+
+checkB_col2,_ 
+reset_col,_,>
+
+//elem de vf:
+checkB_col2_pas,B 
+N,A,-
+
+checkB_col2_pas,A
+findB_col2,A,<
+
+checkB_col2_pas,C
+findB_col2,C,<
+
+checkB_col2_pas,D
+findB_col2,D,<
+
+
+/////////////////find pt coloana 3:
+findB_col3,A
+findB_col3,A,<
+
+findB_col3,B
+findB_col3,B,<
+
+findB_col3,C
+findB_col3,C,<
+
+findB_col3,D
+findB_col3,D,<
+
+findB_col3,*
+findB_col3,*,<
+
+findB_col3,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col3 
+findB_col3,:
+checkB_col3,:,<
+
+//stare aux:
+checkB_col3,B 
+N,A,-
+
+checkB_col3,A 
+findB_col3,A,<
+
+checkB_col3,C 
+findB_col3,C,<
+
+checkB_col3,D 
+findB_col3,D,<
+
+
+/////////////////find pt coloana 4:
+//este urmatorul elem dupa elem de dupa ":"
+
+findB_col4,A
+findB_col4,A,<
+
+findB_col4,B
+findB_col4,B,<
+
+findB_col4,C
+findB_col4,C,<
+
+findB_col4,D
+findB_col4,D,<
+
+findB_col4,*
+findB_col4,*,<
+
+findB_col4,:
+checkB_col4,:,<
+
+findB_col4,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col4:
+//am nevoie de o stare care face inca un pas
+checkB_col4,A
+checkB_col4_pas,A,<
+
+checkB_col4,B
+checkB_col4_pas,B,<
+
+checkB_col4,C
+checkB_col4_pas,C,<
+
+checkB_col4,D
+checkB_col4_pas,D,<
+
+//dupa pas am elementul
+checkB_col4_pas,B 
+N,B,-
+
+checkB_col4_pas,A
+findB_col4,A,<
+
+checkB_col4_pas,C
+findB_col4,C,<
+
+checkB_col4_pas,D
+findB_col4,D,<
+
+
+
+
+/////////////////FIND PT LITERA C/////////////////
+
+/////////////////find pt coloana 1:
+findC_col1,A
+findC_col1,A,<
+
+findC_col1,B
+findC_col1,B,<
+
+findC_col1,C
+findC_col1,C,<
+
+findC_col1,D
+findC_col1,D,<
+
+findC_col1,:
+findC_col1,:,<
+
+//starea aux:
+findC_col1,*
+checkC_col1,*,<
+
+checkC_col1,C 
+N,C,-
+
+checkC_col1,A 
+findC_col1,A,<
+
+checkC_col1,B 
+findC_col1,B,<
+
+checkC_col1,D 
+findC_col1,D,<
+
+checkC_col1,_ 
+reset_col,_,>
+
+/////////////////find pt coloana 2:
+findC_col2,A
+findC_col2,A,<
+
+findC_col2,B
+findC_col2,B,<
+
+findC_col2,C
+findC_col2,C,<
+
+findC_col2,D
+findC_col2,D,<
+
+findC_col2,:
+findC_col2,:,<
+
+findC_col2,*
+checkC_col2,*,<
+
+//stare aux pt vf elem de pe col2:
+checkC_col2,A
+checkC_col2_pas,A,<
+
+checkC_col2,B
+checkC_col2_pas,B,<
+
+checkC_col2,C
+checkC_col2_pas,C,<
+
+checkC_col2,D
+checkC_col2_pas,D,<
+
+checkC_col2,_ 
+reset_col,_,>
+
+//elem de vf:
+checkC_col2_pas,C 
+N,C,-
+
+checkC_col2_pas,A
+findC_col2,A,<
+
+checkC_col2_pas,B
+findC_col2,B,<
+
+checkC_col2_pas,D
+findC_col2,D,<
+
+
+/////////////////find pt coloana 3:
+findC_col3,A
+findC_col3,A,<
+
+findC_col3,B
+findC_col3,B,<
+
+findC_col3,C
+findC_col3,C,<
+
+findC_col3,D
+findC_col3,D,<
+
+findC_col3,*
+findC_col3,*,<
+
+findC_col3,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col3 
+findC_col3,:
+checkC_col3,:,<
+
+//stare aux:
+checkC_col3,C 
+N,C,-
+
+checkC_col3,A 
+findC_col3,A,<
+
+checkC_col3,B 
+findC_col3,B,<
+
+checkC_col3,D 
+findC_col3,D,<
+
+
+/////////////////find pt coloana 4:
+//este urmatorul elem dupa elem de dupa ":"
+
+findC_col4,A
+findC_col4,A,<
+
+findC_col4,B
+findC_col4,B,<
+
+findC_col4,C
+findC_col4,C,<
+
+findC_col4,D
+findC_col4,D,<
+
+findC_col4,*
+findC_col4,*,<
+
+findC_col4,:
+checkC_col4,:,<
+
+findC_col4,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col4:
+//am nevoie de o stare care face inca un pas
+checkC_col4,A
+checkC_col4_pas,A,<
+
+checkC_col4,B
+checkC_col4_pas,B,<
+
+checkC_col4,C
+checkC_col4_pas,C,<
+
+checkC_col4,D
+checkC_col4_pas,D,<
+
+//dupa pas am elementul
+checkC_col4_pas,C 
+N,C,-
+
+checkC_col4_pas,A
+findC_col4,A,<
+
+checkC_col4_pas,B
+findC_col4,B,<
+
+checkC_col4_pas,D
+findC_col4,D,<
+
+
+
+/////////////////FIND PT LITERA D/////////////////
+
+/////////////////find pt coloana 1:
+findD_col1,A
+findD_col1,A,<
+
+findD_col1,B
+findD_col1,B,<
+
+findD_col1,C
+findD_col1,C,<
+
+findD_col1,D
+findD_col1,D,<
+
+findD_col1,:
+findD_col1,:,<
+
+//starea aux:
+findD_col1,*
+checkD_col1,*,<
+
+checkD_col1,D 
+N,D,-
+
+checkD_col1,A 
+findD_col1,A,<
+
+checkD_col1,B 
+findD_col1,B,<
+
+checkD_col1,C 
+findD_col1,C,<
+
+checkD_col1,_ 
+reset_col,_,>
+
+/////////////////find pt coloana 2:
+findD_col2,A
+findD_col2,A,<
+
+findD_col2,B
+findD_col2,B,<
+
+findD_col2,C
+findD_col2,C,<
+
+findD_col2,D
+findD_col2,D,<
+
+findD_col2,:
+findD_col2,:,<
+
+findD_col2,*
+checkD_col2,*,<
+
+findD_col2,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col2:
+checkD_col2,A
+checkD_col2_pas,A,<
+
+checkD_col2,B
+checkD_col2_pas,B,<
+
+checkD_col2,C
+checkD_col2_pas,C,<
+
+checkD_col2,D
+checkD_col2_pas,D,<
+
+checkD_col2,_ 
+reset_col,_,>
+
+//elem de vf:
+checkD_col2_pas,D 
+N,D,-
+
+checkD_col2_pas,A
+findD_col2,A,<
+
+checkD_col2_pas,B
+findD_col2,B,<
+
+checkD_col2_pas,C
+findD_col2,C,<
+
+
+/////////////////find pt coloana 3:
+findD_col3,A
+findD_col3,A,<
+
+findD_col3,B
+findD_col3,B,<
+
+findD_col3,C
+findD_col3,C,<
+
+findD_col3,D
+findD_col3,D,<
+
+findD_col3,*
+findD_col3,*,<
+
+findD_col3,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col3 
+findD_col3,:
+checkD_col3,:,<
+
+//stare aux:
+checkD_col3,D 
+N,D,-
+
+checkD_col3,A 
+findD_col3,A,<
+
+checkD_col3,B 
+findD_col3,B,<
+
+checkD_col3,C 
+findD_col3,C,<
+
+
+/////////////////find pt coloana 4:
+//este urmatorul elem dupa elem de dupa ":"
+
+findD_col4,A
+findD_col4,A,<
+
+findD_col4,B
+findD_col4,B,<
+
+findD_col4,C
+findD_col4,C,<
+
+findD_col4,D
+findD_col4,D,<
+
+findD_col4,*
+findD_col4,*,<
+
+findD_col4,:
+checkD_col4,:,<
+
+findD_col4,_ 
+reset_col,_,>
+
+//stare aux pt vf elem de pe col4:
+//am nevoie de o stare care face inca un pas
+checkD_col4,A
+checkD_col4_pas,A,<
+
+checkD_col4,B
+checkD_col4_pas,B,<
+
+checkD_col4,C
+checkD_col4_pas,C,<
+
+checkD_col4,D
+checkD_col4_pas,D,<
+
+//dupa pas am elementul
+checkD_col4_pas,D 
+N,D,-
+
+checkD_col4_pas,A
+findD_col4,A,<
+
+checkD_col4_pas,B
+findD_col4,B,<
+
+checkD_col4_pas,C
+findD_col4,C,<
+
+
+/////////////////starea de reset/////////////////
+//stare care parcurge tot inputul inapoi spre dreapta de 
+//unde o sa incep iar sa verific toate elementele
+
+reset_col,*
+reset_col,*,>
+
+reset_col,A
+reset_col,A,>
+
+reset_col,B
+reset_col,B,>
+
+reset_col,C
+reset_col,C,>
+
+reset_col,D
+reset_col,D,>
+
+reset_col,:
+reset_col,:,>
+
+reset_col,1
+reset_col,1,>
+
+reset_col,2
+reset_col,2,>
+
+reset_col,3
+reset_col,3,>
+
+reset_col,4
+reset_col,4,>
+
+//reset ofc:
+reset_col,_
+col1,_,<
+
+
+
+///////////////////////REGIUNI////////////////////////////////
+//cursorul este la inceputul inputului voi parcurge de la stanga
+//pentru regiuni voi avea doua tipuri de careuri cele care se afla
+//intre * si  : sau : si *, astfel voi avea doua tipuri de start 
+//verificarea se va face pentru prima jumatate dintr-un careu pentru 
+//care verific pe rand prima si a doua cifra in partea a doua a careului
+//daca nu se repeta acolo, trec la urmatorul careu intrucat am siguranta 
+//in acest punct ca liniile sunt corecte si nu trebuie sa verific cifrele 
+//din aceeasi jumatate a careului intre ele
+//prima data sunt in starea* pt ca acesta este primul tip de careu
+//voi avea 2 stari una de find care retine ce cifra trebuie sa verific in 
+//partea a doua a care ului si alta de verify care verifica litera in functie
+//de unde incepe careul (ce tip e), cand verifica daca sunt diferite le suprascriu
+//cu echivalentul lor din litere A-B-C-D, pt a stii ca aceasta jumatate de careu
+//cand se va ajunge la ea - nu mai trebuie sa fie parte dn start si sa verific ceva 
+//doar voi sterge careul cand voi ajunge ca inceputul sa fie o litera
+
+
+
+/////////////////START DE TIP */////////////////
+//marcheaza faptul ca jumatatea de verificat se afla intre * si :
+start*,*
+start*,_,>
+
+start*,1
+rfind*1,_,>
+
+start*,2
+rfind*2,_,>
+
+start*,3
+rfind*3,_,>
+
+start*,4
+rfind*4,_,>
+
+//daca gasesc litera asta inseamna ca am verificat careul si trebuie
+//sters si trecut la urmatorul careu in functie de simbolul cu care 
+//incepe * sau :
+
+start*,A 
+start*,_,>
+
+start*,B 
+start*,_,>
+
+start*,C 
+start*,_,>
+
+start*,D 
+start*,_,>
+
+//daca gasesc : inseamna ca urmeaza un careu neverificat de tipul :
+
+start*,:
+start:,_,>
+
+//daca gasesc blank inseamna ca am verificat si sters toate careurile corecte
+//si pe banda mai am doar blank deci inputul va fi acceptat
+
+start*,_
+Y,_,-
+
+
+/////////RFIND* si VERIFIY* pt cifra 1:
+//dupa ce am identificat in ce tip de careu ma aflu
+//retin prima cifra care apare si o verific in a doua jumatate
+//din careu care se afla dupa ce se termina linia curenta *
+//raman in aceasta stare pana la *
+//in acest punct liniile sunt corecte deci rfindx,x nu se va intampla
+
+rfind*1,2
+rfind*1,2,>
+
+rfind*1,3
+rfind*1,3,>
+
+rfind*1,4
+rfind*1,4,>
+
+rfind*1,:
+rfind*1,:,>
+
+//in tipul * nu pot da de A,B,C,D pentru ca suprascriu 
+//cu litere jumatatile din acelasi careu si acestea nu 
+//vor fi niciodata pe aceeasi linie
+
+rfind*1,*
+verify*1,*,>
+
+//////verifiy 
+
+verify*1,1
+N,_,-
+
+//suprascriu cu litere cifrele din a doua jumatate
+// pentru a tine evidenta careului verificat
+verify*1,2
+verify*1,B,> 
+
+verify*1,3
+verify*1,C,> 
+
+verify*1,4
+verify*1,D,> 
+
+//se ajunge doar pentru verificarea celei de-a doua 
+//cifre din prima jumatate
+verify*1,A
+N,_,-
+
+verify*1,B
+verify*1,B,> 
+
+verify*1,C
+verify*1,C,> 
+
+verify*1,D
+verify*1,D,> 
+
+//cand ajung la : inseamna ca am terminat de verificat 
+//in a doua jumatate a careului curent de tip * deci pot 
+//sa resetez startul care va ramane in acelasi tip pentru 
+//a doua cifra de verificat si isi va schimba tipul altfel
+
+verify*1,:
+reset*,:,<
+
+
+/////////RFIND* si VERIFIY* pt cifra 2:
+rfind*2,1
+rfind*2,1,>
+
+rfind*2,3
+rfind*2,3,>
+
+rfind*2,4
+rfind*2,4,>
+
+rfind*2,:
+rfind*2,:,>
+
+//in tipul * nu pot da de A,B,C,D pentru ca suprascriu 
+//cu litere jumatatile din acelasi careu si acestea 
+//nu vor fi niciodata pe aceeasi linie
+
+rfind*2,*
+verify*2,*,>
+
+//////verifiy 
+
+verify*2,2
+N,_,-
+
+//suprascriu cu litere cifrele din a doua jumatate
+// pentru a tine evidenta careului verificat
+verify*2,1
+verify*2,A,> 
+
+verify*2,3
+verify*2,C,> 
+
+verify*2,4
+verify*2,D,> 
+
+//se ajunge doar pentru verificarea celei de-a doua 
+//cifre din prima jumatate
+verify*2,B
+N,_,-
+
+verify*2,A
+verify*2,A,> 
+
+verify*2,C
+verify*2,C,> 
+
+verify*2,D
+verify*2,D,> 
+
+//am verificat tot
+verify*2,:
+reset*,:,<
+
+
+/////////RFIND* si VERIFIY* pt cifra 3:
+rfind*3,1
+rfind*3,1,>
+
+rfind*3,2
+rfind*3,2,>
+
+rfind*3,4
+rfind*3,4,>
+
+rfind*3,:
+rfind*3,:,>
+
+rfind*3,*
+verify*3,*,>
+
+//////verify
+
+verify*3,3
+N,_,-
+
+//suprascriu cu litere cifrele din a doua jumatate
+// pentru a tine evidenta careului verificat
+verify*3,1
+verify*3,A,> 
+
+verify*3,2
+verify*3,B,> 
+
+verify*3,4
+verify*3,D,> 
+
+
+verify*3,C
+N,_,-
+
+verify*3,A
+verify*3,A,> 
+
+verify*3,B
+verify*3,B,> 
+
+verify*3,D
+verify*3,D,> 
+
+//am verificat tot
+verify*3,:
+reset*,:,<
+
+
+/////////RFIND* si VERIFIY* pt cifra 4:
+rfind*4,1
+rfind*4,1,>
+
+rfind*4,2
+rfind*4,2,>
+
+rfind*4,3
+rfind*4,3,>
+
+rfind*4,:
+rfind*4,:,>
+
+rfind*4,*
+verify*4,*,>
+
+//////verify
+verify*4,4
+N,_,-
+
+//suprascriu cu litere cifrele din a doua jumatate
+// pentru a tine evidenta careului verificat
+verify*4,1
+verify*4,A,> 
+
+verify*4,2
+verify*4,B,> 
+
+verify*4,3
+verify*4,C,> 
+
+verify*4,D
+N,_,-
+
+verify*4,A
+verify*4,A,> 
+
+verify*4,B
+verify*4,B,> 
+
+verify*4,C
+verify*4,C,> 
+
+//am verificat tot
+verify*4,:
+reset*,:,<
+
+
+
+/////////RESET pt tipul */////////
+//reset doar merge inapoi pana da de primul blank
+reset*,1
+reset*,1,<
+
+reset*,2
+reset*,2,<
+
+reset*,3
+reset*,3,<
+
+reset*,4
+reset*,4,<
+
+reset*,A
+reset*,A,<
+
+reset*,B
+reset*,B,<
+
+reset*,C
+reset*,C,<
+
+reset*,D
+reset*,D,<
+
+reset*,:
+reset*,:,<
+
+reset*,*
+reset*,*,<
+
+//se duce in start de tipul sau unde se va verificand
+//daca este nevoie sau nu de schimbarea tipului careului
+reset*,_
+start*,_,>
+
+
+
+
+/////////////////START DE TIP ://///////////////
+//marcheaza faptul ca jumatatea de verificat se afla intre : si *
+
+start:,:
+start:,_,>
+
+start:,1
+rfind:1,_,>
+
+start:,2
+rfind:2,_,>
+
+start:,3
+rfind:3,_,>
+
+start:,4
+rfind:4,_,>
+
+start:,A 
+start:,_,>
+
+start:,B 
+start:,_,>
+
+start:,C 
+start:,_,>
+
+start:,D 
+start:,_,>
+
+//daca gasesc * inseamna ca urmeaza un careu neverificat de alt tip
+start:,*
+start*,_,>
+
+//input acceptat
+start:,_
+Y,_,-
+
+
+
+/////////RFIND: si VERIFIY: pt cifra 1:
+//pentru tipul : raman in starea curenta care a 
+//retinut ce cifra caut in a doua jumatate, pana cand
+//dau de :, intrucat imediat dupa : se afla jumatatea 
+//lipsa a regiunii sale
+
+rfind:1,1
+rfind:1,1,>
+
+rfind:1,2
+rfind:1,2,>
+
+rfind:1,3
+rfind:1,3,>
+
+rfind:1,4
+rfind:1,4,>
+
+rfind:1,*
+rfind:1,*,>
+
+//fata de tipul *, aici pot aparea si literele
+//intrucat ele sunt parti din careul verificat anterior 
+//ce se afla fix inaintea jumatatii in care verific
+
+rfind:1,A
+rfind:1,A,>
+
+rfind:1,B
+rfind:1,B,>
+
+rfind:1,C
+rfind:1,C,>
+
+rfind:1,D
+rfind:1,D,>
+
+rfind:1,:
+verify:1,:,>
+
+//////verify
+
+verify:1,1
+N,_,-
+
+//suprascriu cu litere cifrele din a doua jumatate
+// pentru a tine evidenta careului verificat
+verify:1,2
+verify:1,B,> 
+
+verify:1,3
+verify:1,C,> 
+
+verify:1,4
+verify:1,D,> 
+
+
+//se ajunge aici cand verific a doua cifra
+verify:1,A
+N,_,-
+
+verify:1,B
+verify:1,B,> 
+
+verify:1,C
+verify:1,C,> 
+
+verify:1,D
+verify:1,D,> 
+
+//am verificat tot
+verify:1,*
+reset:,*,<
+
+
+/////////RFIND: si VERIFIY: pt cifra 2:
+//parcurge pana la :
+rfind:2,1
+rfind:2,1,>
+
+rfind:2,2
+rfind:2,2,>
+
+rfind:2,3
+rfind:2,3,>
+
+rfind:2,4
+rfind:2,4,>
+
+rfind:2,*
+rfind:2,*,>
+
+rfind:2,A
+rfind:2,A,>
+
+rfind:2,B
+rfind:2,B,>
+
+rfind:2,C
+rfind:2,C,>
+
+rfind:2,D
+rfind:2,D,>
+
+rfind:2,:
+verify:2,:,>
+
+//////verify
+
+verify:2,2
+N,_,-
+
+//tin evidenta careului verificat
+verify:2,1
+verify:2,A,> 
+
+verify:2,3
+verify:2,C,> 
+
+verify:2,4
+verify:2,D,> 
+
+//se ajunge aici cand verific a doua cifra
+verify:2,B
+N,_,-
+
+verify:2,A
+verify:2,A,> 
+
+verify:2,C
+verify:2,C,> 
+
+verify:2,D
+verify:2,D,> 
+
+//am verificat tot
+verify:2,*
+reset:,*,<
+
+
+/////////RFIND: si VERIFIY: pt cifra 3:
+//parcurge pana la :
+rfind:3,1
+rfind:3,1,>
+
+rfind:3,2
+rfind:3,2,>
+
+rfind:3,3
+rfind:3,3,>
+
+rfind:3,4
+rfind:3,4,>
+
+rfind:3,*
+rfind:3,*,>
+
+rfind:3,A
+rfind:3,A,>
+
+rfind:3,B
+rfind:3,B,>
+
+rfind:3,C
+rfind:3,C,>
+
+rfind:3,D
+rfind:3,D,>
+
+rfind:3,:
+verify:3,:,>
+
+//////verify
+
+verify:3,3
+N,_,-
+
+//tin evidenta careului verificat
+verify:3,1
+verify:3,A,> 
+
+verify:3,2
+verify:3,B,> 
+
+verify:3,4
+verify:3,D,> 
+
+//se ajunge aici cand verific a doua cifra
+verify:3,C
+N,_,-
+
+verify:3,A
+verify:3,A,> 
+
+verify:3,B
+verify:3,B,> 
+
+verify:3,D
+verify:3,D,> 
+
+//am verificat tot
+verify:3,*
+reset:,*,<
+
+
+/////////RFIND: si VERIFIY: pt cifra 4:
+//parcurge pana la :
+rfind:4,1
+rfind:4,1,>
+
+rfind:4,2
+rfind:4,2,>
+
+rfind:4,3
+rfind:4,3,>
+
+rfind:4,4
+rfind:4,4,>
+
+rfind:4,*
+rfind:4,*,>
+
+rfind:4,A
+rfind:4,A,>
+
+rfind:4,B
+rfind:4,B,>
+
+rfind:4,C
+rfind:4,C,>
+
+rfind:4,D
+rfind:4,D,>
+
+rfind:4,:
+verify:4,:,>
+
+//////verify
+
+verify:4,4
+N,_,-
+
+//tin evidenta careului verificat
+verify:4,1
+verify:4,A,> 
+
+verify:4,2
+verify:4,B,> 
+
+verify:4,3
+verify:4,C,> 
+
+//se ajunge aici cand verific a doua cifra
+verify:4,D
+N,_,-
+
+verify:4,A
+verify:4,A,> 
+
+verify:4,B
+verify:4,B,> 
+
+verify:4,C
+verify:4,C,> 
+
+//am verificat tot
+verify:4,*
+reset:,*,<
+
+
+/////////RESET pt tipul *:
+reset:,1
+reset:,1,<
+
+reset:,2
+reset:,2,<
+
+reset:,3
+reset:,3,<
+
+reset:,4
+reset:,4,<
+
+reset:,A
+reset:,A,<
+
+reset:,B
+reset:,B,<
+
+reset:,C
+reset:,C,<
+
+reset:,D
+reset:,D,<
+
+reset:,:
+reset:,:,<
+
+reset:,*
+reset:,*,<
+
+reset:,_
+start:,_,>
